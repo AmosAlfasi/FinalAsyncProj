@@ -18,6 +18,27 @@ const costSchema = new mongoose.Schema(
 			],
 			required: true,
 		},
+		year: { type: String, required: true },
+
+		month: {
+			type: String,
+			enum: [
+				"January",
+				"February",
+				"March",
+				"April",
+				"May",
+				"June",
+				"July",
+				"August",
+				"September",
+				"October",
+				"November",
+				"December",
+			],
+			required: true,
+		},
+
 		sum: {
 			type: Number,
 			required: true,
