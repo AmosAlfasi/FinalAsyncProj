@@ -31,6 +31,50 @@ const userSchema = new mongoose.Schema(
 			type: Number,
 			default: 0,
 		},
+
+		reportsData: [
+			{
+				year: Number,
+				sum: Number,
+				months: {
+					sum: Number,
+					name: {
+						type: String,
+						enum: [
+							"January",
+							"February",
+							"March",
+							"April",
+							"May",
+							"June",
+							"July",
+							"August",
+							"September",
+							"October",
+							"November",
+							"December",
+						],
+					},
+					costsInfo: [
+						{
+							description: String,
+							category: {
+								type: String,
+								enum: [
+									"food",
+									"health",
+									"sport",
+									"housing",
+									"transportation",
+									"education",
+								],
+							},
+							sum: Number,
+						},
+					],
+				},
+			},
+		],
 	},
 	{ timestamps: true }
 );
