@@ -13,7 +13,7 @@ app.use("/users", users);
 app.use("/costs", costs);
 
 mongoose.connect(
-	"mongodb+srv://diana:Dk318402161@users.cetqw.mongodb.net/finalProject?retryWrites=true&w=majority",
+	"*************************************************************************************s",
 	{
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
@@ -25,3 +25,4 @@ mongoose.connect(
 app.listen(1500, () => {
 	console.log(`App listening on port 1500`);
 });
+s
