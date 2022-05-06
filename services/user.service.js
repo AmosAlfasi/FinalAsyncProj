@@ -10,62 +10,89 @@ module.exports = {
 		return newUser;
 	},
 
-	async createOrUpdateUserCosts(id, sum) {
-		await User.findOneAndUpdate(
-			{ id },
-			{ $inc: { sumOfCosts: sum } },
-			{ runValidators: true, upsert: true, new: true }
-		);
-	},
-
 	async reportUserUpdate(newCost, id) {
 		const user = await User.findOne({ id });
-		console.log(user);
 		if (!user) {
 			console.log(`user with id:${id} not found`);
 			return;
 		}
 
-		const ueserWithOutRrecords = await User.findOneAndUpdate(
-			{
-				id,
-				$or: [
-					{ reportsData: [] },
-					{ $nin: { "reportsData.$.year": newCost.year } },
-				],
-			},
-			{
-				$push: {
-					reportsData: {
-						year: newCost.year,
-						sum: newCost.sum,
-						months: {
-							sum: newCost.sum,
-							name: newCost.month,
-							costsInfo: [
-								{
-									description: newCost.description,
-									category: newCost.category,
-									sum: newCost.sum,
-								},
-							],
-						},
-					},
-				},
-			},
-			{ runValidators: true, new: true }
-		);
+		const yearIndex = user.reportsData.findIndex(element => element.year === newCost.year)
 
-		const userWithReports = await User.findOneAndUpdate(
+		if (yearIndex === -1) {
+			user.reportsData.push({
+				year: newCost.year,
+				sum: newCost.sum,
+				months: {
+					sum: newCost.sum,
+					name: newCost.month,
+					costsInfo: [
+						{
+							description: newCost.description,
+							category: newCost.category,
+							sum: newCost.sum,
+						},
+					],
+				},
+			})
+
+			const updatedUser = await User.findOneAndUpdate({ id }, { reportsData: user.reportsData }, { runValidators: true, new: true })
+			return updatedUser;
+		}
+
+
+		if (yearIndex >= 0) {
+
+			const monthIndex = user.reportsData[yearIndex].months.findIndex(element => element.name === newCost.month)
+
+			if (monthIndex === -1) {
+				user.reportsData[yearIndex].months.push({
+					sum: newCost.sum,
+					name: newCost.month,
+					costsInfo: [
+						{
+							description: newCost.description,
+							category: newCost.category,
+							sum: newCost.sum,
+						},
+					],
+				})
+				user.reportsData[yearIndex].sum += newCost.sum
+
+				const updatedUser = await User.findOneAndUpdate({ id }, { reportsData: user.reportsData }, { runValidators: true, new: true })
+				return updatedUser;
+			}
+
+
+
+			if (monthIndex >= 0) {
+				user.reportsData[yearIndex].months[monthIndex].costsInfo.push({ description: newCost.description, category: newCost.category, sum: newCost.sums })
+				user.reportsData[yearIndex].months[monthIndex].sum += newCost.sum
+				user.reportsData[yearIndex].sum += newCost.sum
+
+				const updatedUser = await User.findOneAndUpdate({ id }, { reportsData: user.reportsData }, { runValidators: true, new: true })
+				return updatedUser;
+			}
+		}
+	},
+
+	async generateMonthlyReport(id, year, month) {
+		return User.aggregate([
 			{
-				id,
-				"reportsData.$.year": newCost.year,
-				$or: [
-					{ "reportsData.$[year].months": [] },
-					{ $nin: { "reportsData.$[year].months.$.name": newCost.month } },
-				],
+				$match: { id }
 			},
-			{ sumOfCosts: 500 }
-		);
+			{
+				$unwind: "$reportsData"
+			},
+			{
+				$match: { 'reportsData.year': year }
+			},
+			{
+				$unwind: "$reportsData.months"
+			},
+			{
+				$match: { 'reportsData.months.name': month }
+			},
+		])
 	},
 };

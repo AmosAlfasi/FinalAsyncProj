@@ -18,7 +18,7 @@ const costSchema = new mongoose.Schema(
 			],
 			required: true,
 		},
-		year: { type: String, required: true },
+		year: { type: Number, required: true },
 
 		month: {
 			type: String,
