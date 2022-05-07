@@ -21,13 +21,24 @@ router.post("/insert-or-update-user", async (req, res) => {
 
 router.get("/get-monthly-report/:id", async (req, res) => {
 	try {
-		const { id } = req.params
-		const { year, month } = req.body
+		const { id } = req.params;
+		const { year, month } = req.body;
 		const report = await userService.generateMonthlyReport(id, year, month);
-		res.status(200).send(report)
+		res.status(200).send(report);
 	} catch (error) {
 		console.log(error);
 	}
-})
+});
+
+router.get("/get-yearly-report/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+		const { year } = req.body;
+		const report = await userService.generateYearlyReport(id, year);
+		res.status(200).send(report);
+	} catch (error) {
+		console.log(error);
+	}
+});
 
 module.exports = router;
