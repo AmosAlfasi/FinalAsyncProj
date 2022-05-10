@@ -122,28 +122,4 @@ module.exports = {
 			},
 		]);
 	},
-
-	async generateYearlyReport(id, year) {
-		return User.aggregate([
-			{
-				$match: { id },
-			},
-			{
-				$unwind: "$reportsData",
-			},
-			{
-				$match: { "reportsData.year": year },
-			},
-			{
-				$project: {
-					firstName: 1,
-					lastName: 1,
-					id: 1,
-					year: "$reportsData.year",
-					total: "$reportsData.sum",
-					costs: "$reportsData.months",
-				},
-			},
-		]);
-	},
 };
