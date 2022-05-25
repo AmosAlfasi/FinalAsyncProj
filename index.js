@@ -15,7 +15,7 @@ app.use("/costs", costs);
 
 //connecting the app to MongoDb
 mongoose.connect(
-	"mongodb+srv://diana:Dk318402161@users.cetqw.mongodb.net/finalProject?retryWrites=true&w=majority",
+	"mongodb+srv://*************************************************",
 	{
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
