@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+//the user must contain id,firstname,lastname,maritalStatus and birthday.
+//the report data will be added by adding costs data to user
 const userSchema = new mongoose.Schema(
 	{
 		id: {
@@ -68,7 +70,7 @@ const userSchema = new mongoose.Schema(
 								sum: Number,
 							},
 						],
-					}
+					},
 				],
 			},
 		],

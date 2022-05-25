@@ -5,6 +5,7 @@ const costs = require("./routes/costs");
 
 const app = express();
 
+//Parsing incoming json data request
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -12,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/users", users);
 app.use("/costs", costs);
 
+//connecting the app to MongoDb
 mongoose.connect(
 	"mongodb+srv://diana:Dk318402161@users.cetqw.mongodb.net/finalProject?retryWrites=true&w=majority",
 	{

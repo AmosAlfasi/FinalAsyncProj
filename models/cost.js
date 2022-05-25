@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+//the cost must contain desription,category,year,month and sum
 const costSchema = new mongoose.Schema(
 	{
 		description: {

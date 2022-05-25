@@ -1,6 +1,7 @@
 const User = require("../models/user");
 
 module.exports = {
+	//This method create user if not found,else,update the user that was found
 	async createOrUpdateUser(id, firstName, lastName, maritalStatus, birthday) {
 		const newUser = await User.findOneAndUpdate(
 			{ id },
@@ -10,6 +11,8 @@ module.exports = {
 		return newUser;
 	},
 
+	//This method insert cost to user with the computed Design Pattern.
+	//inserting cost to user based on month and year
 	async reportUserUpdate(newCost, id) {
 		const user = await User.findOne({ id });
 		if (!user) {
@@ -91,7 +94,7 @@ module.exports = {
 			}
 		}
 	},
-
+	//this method return report of the user cost for a specific month and year
 	async generateMonthlyReport(id, year, month) {
 		return User.aggregate([
 			{
